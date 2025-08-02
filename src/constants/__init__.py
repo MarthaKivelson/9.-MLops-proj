@@ -33,4 +33,7 @@ DATA_VALIDATION_FILE_NAME: str = "report.yaml"
 DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"
 DATA_TRANSFORMATION_TRANSFORMED_DIR: str = "transformed"
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"
-PREPROCSSING_OBJECT_FILE_NAME: str = "model.pkl" 
+
+TARGET_COLUMN = "Response"
+CURRENT_YEAR = date.today().year
+PREPROCSSING_OBJECT_FILE_NAME = "preprocessing.pkl" 
