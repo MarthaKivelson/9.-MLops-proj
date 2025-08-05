@@ -208,3 +208,5 @@ __marimo__/
 
 projectflow.txt
 artifact/
+
+src/logger/logs/*
