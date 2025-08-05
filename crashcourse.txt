@@ -146,6 +146,6 @@ sudo ./svc.sh uninstall
 # Re-install and start the service
 sudo ./svc.sh install
 sudo ./svc.sh start
-```
+ ```
 
 After following these steps, the runner should be persistently running as a background service on your EC2 instance and ready to accept jobs.
