@@ -36,7 +36,7 @@ class MyModel:
             logging.info("Starting prediction process")
 
             #apply scaling 
-            transformed_features = self.preprocessing_obj.transform(dataframe)
+            transformed_features = self.preprocessing_obj.fit_transform(dataframe)
 
             #prediction using model
             logging.info("Using the trained model")

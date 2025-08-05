@@ -59,8 +59,8 @@ class SimpleStorageService:
         try:
             # Read and decode the object content if decode=True
             func = (
-                lambda: object_name.get()["Body"].read().decode()
-                if decode else object_name.get()["Body"].read()
+                lambda: object_name.get()["Body"]#.read().decode()
+                if decode else object_name.get()["Body"]#.read()
             )
             # Convert to StringIO if make_readable=True
             conv_func = lambda: StringIO(func()) if make_readable else func()
