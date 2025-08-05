@@ -1,57 +1,84 @@
-name: Deploy Application Docker Image to EC2 instance
+# .github/workflows/aws.yml
+name: Build and Deploy to Amazon ECR and EC2
+
+# Use top-level env variables for values shared across jobs
+env:
+  AWS_REGION: us-east-1                   # <<< SET YOUR AWS REGION
+  ECR_REPOSITORY: vehicleproj      # <<< SET YOUR ECR REPOSITORY NAME
 
 on:
   push:
     branches: [main]
 
 jobs:
-  Continuous-Integration:
+  # ===================================================
+  # JOB 1: Build and Push Docker Image to Amazon ECR
+  # ===================================================
+  build-and-push:
+    name: Build and Push to ECR
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    # Use OIDC for secure, keyless authentication with AWS
+    permissions:
+      id-token: write   # Required to request an OIDC token from GitHub
+      contents: read    # Required for actions/checkout
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          # Use role-based authentication instead of static keys
+          role-to-assume: arn:aws:iam::907986008617:role/GitHubActions-ECR-Role # <<< SET YOUR ROLE ARN
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .  
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-  Continuous-Deployment:
-    needs: Continuous-Integration
-    runs-on: self-hosted
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: docker/build-push-action@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          context: .
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+  # ===================================================
+  # JOB 2: Deploy Docker Image on Self-Hosted EC2 Runner
+  # ===================================================
+  deploy:
+    name: Deploy to EC2
+    needs: build-and-push # This job runs only after the build-and-push job succeeds
+    runs-on: self-hosted  # This job runs on your EC2 instance
 
-      - name: Run Docker Image to serve users
+    steps:
+      - name: Pull latest image from Amazon ECR
         run: |
-         docker run -d -e AWS_ACCESS_KEY_ID= "${{ secrets.AWS_ACCESS_KEY_ID }}" -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" -e MONGODB_URL="${{ secrets.MONGODB_URL }}" -p 5000:5000 "${{ steps.login-ecr.outputs.registry }}"/"${{ secrets.ECR_REPO }}":latest
+          # The self-hosted runner needs AWS credentials to pull from a private ECR repo.
+          # This should be configured via an IAM Instance Profile on the EC2 machine for security.
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+        
+      - name: Stop and remove existing container
+        run: |
+          # Stop and remove the old container if it exists to avoid port conflicts
+          docker stop my-app-container || true
+          docker rm my-app-container || true
+
+      - name: Run new Docker container
+        run: |
+          # Run the new container.
+          # CRITICAL: Do NOT pass AWS credentials as environment variables.
+          # The application inside the container will get credentials from the EC2 Instance Profile.
+          docker run \
+            --name my-app-container \
+            -d \
+            --restart always \
+            -e MONGODB_URL="${{ secrets.MONGODB_URL }}" \
+            -p 5000:5000 \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
