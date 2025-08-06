@@ -3,6 +3,7 @@ from src.exception import MyException
 from src.entity.estimator import MyModel
 import sys
 from pandas import DataFrame
+from src.logger import logging
 
 class Proj1Estimator:
     """
@@ -55,7 +56,9 @@ class Proj1Estimator:
         """
         try:
             if self.loaded_model is None:
+                logging.info("Loaded_model is none, Loading a model")
                 self.loaded_model = self.load_model()
+                logging.info("Loaded model successfully")
             return self.loaded_model.predict(dataframe=dataframe)
         except Exception as e:
             raise MyException(e, sys)
