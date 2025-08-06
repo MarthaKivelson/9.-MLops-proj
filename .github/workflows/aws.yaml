@@ -12,6 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: cleanup
+        run: |
+          unset AWS_DEFAULT_REGION
+          unset AWS_REGION
+          unset AWS_ACCESS_KEY_ID
+          unset AWS_SECRET_ACCESS_KEY
+          unset AWS_SESSION_TOKEN
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -40,6 +48,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: cleanup
+        run: |
+          unset AWS_DEFAULT_REGION
+          unset AWS_REGION
+          unset AWS_ACCESS_KEY_ID
+          unset AWS_SECRET_ACCESS_KEY
+          unset AWS_SESSION_TOKEN
+      
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
