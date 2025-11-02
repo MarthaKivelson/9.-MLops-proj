@@ -4,6 +4,7 @@ from src.entity.estimator import MyModel
 import sys
 from pandas import DataFrame
 from src.logger import logging
+import traceback
 
 class Proj1Estimator:
     """
@@ -23,9 +24,10 @@ class Proj1Estimator:
     def is_model_present(self, model_path):
         try:
             return self.s3.s3_key_path_available(bucket_name=self.bucket_name, s3_key=model_path)
-        except MyException as e:
-            print(e)
-            return False
+        except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
+            raise MyException(e, sys)
         
     def load_model(self,) -> MyModel:
         """
@@ -47,6 +49,8 @@ class Proj1Estimator:
                                 bucket_name=self.bucket_name,
                                 remove=remove)
         except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
             raise MyException(e, sys)
         
     def predict(self, dataframe:DataFrame):
@@ -61,4 +65,6 @@ class Proj1Estimator:
                 logging.info("Loaded model successfully")
             return self.loaded_model.predict(dataframe=dataframe)
         except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
             raise MyException(e, sys)

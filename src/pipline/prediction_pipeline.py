@@ -4,6 +4,7 @@ from src.entity.s3_estimator import Proj1Estimator
 from src.exception import MyException
 from src.logger import logging
 from pandas import DataFrame
+import traceback
 
 
 class VehicleData:
@@ -89,6 +90,8 @@ class VehicleDataClassifier:
         try:
             self.prediction_pipeline_config = prediction_pipeline_config
         except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
             raise MyException(e, sys)
 
     def predict(self, dataframe) -> str:
@@ -107,4 +110,6 @@ class VehicleDataClassifier:
             return result
         
         except Exception as e:
+            logging.error(f"Error occurred: {str(e)}")
+            logging.error(traceback.format_exc())
             raise MyException(e, sys)
