@@ -103,7 +103,7 @@ class VehicleDataClassifier:
             logging.info("Entered predict method of VehicleDataClassifier class")
             model = Proj1Estimator(
                 bucket_name=self.prediction_pipeline_config.model_bucket_name,
-                model_path=self.prediction_pipeline_config.model_file_path,
+                model_path=self.prediction_pipeline_config.model_file_path
             )
             result =  model.predict(dataframe)
             
