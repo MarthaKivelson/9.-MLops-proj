@@ -16,10 +16,12 @@ class Proj1Estimator:
         :param bucket_name: Name of your model bucket
         :param model_path: Location of your model in bucket
         """
+        logging.INFO("Into S3")
         self.bucket_name = bucket_name
         self.s3 = SimpleStorageService()
         self.model_path = model_path
         self.loaded_model: MyModel = None
+        logging.INFO("Done with S3")
 
     def is_model_present(self, model_path):
         try:

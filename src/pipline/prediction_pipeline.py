@@ -105,6 +105,7 @@ class VehicleDataClassifier:
                 bucket_name=self.prediction_pipeline_config.model_bucket_name,
                 model_path=self.prediction_pipeline_config.model_file_path
             )
+            logging.INFO("Model fetched successfully")
             result =  model.predict(dataframe)
             
             return result
