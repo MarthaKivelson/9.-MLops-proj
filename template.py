@@ -1,3 +1,5 @@
+#A script that automatically generates the folder structure required for an MLOps project 
+# (e.g., src, components, pipeline, utils, notebooks).
 import os
 from pathlib import Path
 

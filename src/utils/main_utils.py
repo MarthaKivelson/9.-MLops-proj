@@ -1,3 +1,8 @@
+#Custom Logging & Exceptions: * Logger: Records the execution flow of the application. 
+# If the pipeline crashes, the logs tell you exactly which module was running.
+
+#Exception Handling: A custom wrapper that catches errors and provides detailed tracebacks 
+# (e.g., the exact filename and line number where the code failed).
 import os
 import sys
 
