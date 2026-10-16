@@ -134,7 +134,7 @@ class DataTransformation:
             logging.info("Train-Test data loaded")
 
 
-            input_features_train_df = train_df.drop(columns=[TARGET_COLUMN], axis= 1)
+            input_features_train_df = train_df.drop(columns=[TARGET_COLUMN])
             target_feature_train_df = train_df[TARGET_COLUMN]
 
             input_features_test_df = test_df.drop(columns=[TARGET_COLUMN])

@@ -62,7 +62,7 @@ REGION_NAME = "us-east-1"
 MODEL Evaluation related constants
 """
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
-MODEL_BUCKET_NAME = "ash-model-mlopsproj"
+MODEL_BUCKET_NAME = "bucket-mlopsproj-model"
 MODEL_PUSHER_S3_KEY = "model-registry"
 
 APP_HOST = "127.0.0.1"

@@ -41,11 +41,10 @@ class Proj1Data:
                 collection = self.mongo_client[database_name][collection_name]
             
             # Convert collection data to DataFrame and preprocess   
-            print("Fetching data from mongoDB")
             df = pd.DataFrame(list(collection.find()))
-            print(f"Data fetched with length: {len(df)}")
+            logging.Logger(f"Data fetched with length: {len(df)}")
             if "id" in df.columns.to_list():
-                df = df.drop(columns=["id"], axis=1)
+                df = df.drop(columns=["id"])
             df.replace({"na":np.nan}, inplace=True)
             return df
         except Exception as e:

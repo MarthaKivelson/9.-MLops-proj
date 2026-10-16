@@ -99,7 +99,7 @@ async def trainRouteClient():
         return Response(f"Error Occurred! {e}")
 
 # Route to handle form submission and make predictions
-@app.post("/")
+@app.post("/predict")
 async def predictRouteClient(request: Request):
     """
     Endpoint to receive form data, process it, and make a prediction.
@@ -138,7 +138,7 @@ async def predictRouteClient(request: Request):
         return templates.TemplateResponse(
             request=request, 
             name="vehicledata.html",
-            context={"context": "Rendering"}
+            context={"context": status}
         )
         
     except Exception as e:
