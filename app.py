@@ -81,7 +81,6 @@ async def index(request: Request):
     return templates.TemplateResponse(
             request=request, 
             name="vehicledata.html",
-            context={"context": "Rendering"}
         )
 
 # Route to trigger the model training process
