@@ -215,24 +215,52 @@ After pushing a change to `main`, the application will be automatically deployed
 .
 ├── .github/
 │   └── workflows/
-│       └── aws.yaml              # GitHub Actions CI/CD pipeline
-├── notebooks/                    # Jupyter notebooks for EDA and experiments
-├── src/                           # Source code for the project
-│   ├── components/               # ML pipeline components
-│   ├── config/                   # Configuration files (schema)
-│   ├── constant/                 # Project constants
-│   ├── data_access/              # Scripts for accessing data
-│   ├── entity/                   # Project entities (configs, artifacts)
-│   ├── exception/                # Custom exception handling
-│   ├── logger/                   # Logging setup
-│   ├── pipeline/                 # ML pipeline definitions
-│   └── utils/                    # Utility functions
-├── static/                        # Static files for the web app (CSS, JS)
-├── templates/                     # HTML templates for the web app
-├── app.py                         # Main application file (Flask/FastAPI)
-├── demo.py                        # Script to run the training pipeline
-├── Dockerfile                     # Docker configuration
-├── requirements.txt               # Python package requirements
-├── setup.py                       # Setup script for installing local packages
-└── template.py                    # Script to create the initial project structure
+│       └── aws.yaml                    # GitHub Actions CI/CD pipeline
+├── notebooks/                           # Jupyter notebooks for EDA and experiments
+├── src/
+│   ├── cloud_storage/                   # Cloud storage utilities
+│   ├── components/                      # ML pipeline components
+│   │   ├── __init__.py
+│   │   ├── data_ingestion.py
+│   │   ├── data_transformation.py
+│   │   ├── data_validation.py
+│   │   ├── model_evaluation.py
+│   │   ├── model_pusher.py
+│   │   └── model_trainer.py
+│   ├── configuration/                   # AWS and MongoDB configuration
+│   │   ├── __init__.py
+│   │   ├── aws_connection.py
+│   │   └── mongo_db_connection.py
+│   ├── constants/                       # Project constants
+│   │   └── __init__.py
+│   ├── data_access/                     # Data access layer
+│   │   ├── __init__.py
+│   │   └── proj1_data.py
+│   ├── entity/                          # Project entities and configurations
+│   │   ├── __init__.py
+│   │   ├── artifact_entity.py
+│   │   ├── config_entity.py
+│   │   ├── estimator.py
+│   │   └── s3_estimator.py
+│   ├── exception/                       # Custom exception handling
+│   │   └── __init__.py
+│   ├── logger/                          # Logging setup and logs
+│   │   ├── __init__.py
+│   │   └── logs/
+│   ├── pipeline/                        # ML training and prediction pipelines
+│   │   ├── __init__.py
+│   │   ├── prediction_pipeline.py
+│   │   └── training_pipeline.py
+│   ├── utils/                           # Utility functions
+│   │   ├── __init__.py
+│   │   └── main_utils.py
+│   └── __init__.py
+├── static/                              # Static files for the web app (CSS, JS)
+├── templates/                           # HTML templates for the web app
+├── app.py                               # Main FastAPI application
+├── demo.py                              # Script to run the training pipeline
+├── Dockerfile                           # Docker configuration
+├── requirements.txt                     # Python dependencies
+├── setup.py                             # Local package installation
+└── template.py                          # Initial project structure generator
 ```
