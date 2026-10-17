@@ -6,7 +6,7 @@ from setuptools import find_packages
 setup(
     name='src',
     version='0.0.1',
-    author='Ashwini',
-    author_email="ashwini130402@gmail.com",
+    author='Uttam',
+    author_email="kputtam7@gmail.com",
     packages=find_packages()
 )

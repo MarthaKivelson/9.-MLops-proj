@@ -205,28 +205,34 @@ ECR_REPO: The name of your ECR repository (e.g., vehicleproj).
 
 MONGODB_URL: Your MongoDB connection string.
 
-After pushing a change to main, the application will be automatically deployed. You can access it via: http://<your-ec2-public-ip>:5000.
+After pushing a change to `main`, the application will be automatically deployed. You can access it at:
 
-📂 Project Structure
+`http://<your-ec2-public-ip>:5000`
+
+## 📂 Project Structure
+
+```text
 .
-├── .github/workflows/         # GitHub Actions CI/CD pipeline
-│   └── aws.yaml
-├── notebooks/                 # Jupyter notebooks for EDA and experiments
-├── src/                       # Source code for the project
-│   ├── components/            # ML pipeline components
-│   ├── config/                # Configuration files (schema)
-│   ├── constant/              # Project constants
-│   ├── data_access/           # Scripts for accessing data
-│   ├── entity/                # Project entities (configs, artifacts)
-│   ├── exception/             # Custom exception handling
-│   ├── logger/                # Logging setup
-│   ├── pipeline/              # ML pipeline definitions
-│   └── utils/                 # Utility functions
-├── static/                    # Static files for the web app (CSS, JS)
-├── templates/                 # HTML templates for the web app
-├── app.py                     # Main application file (Flask/FastAPI)
-├── demo.py                    # Script to run the training pipeline
-├── Dockerfile                 # Docker configuration for the application
-├── requirements.txt           # Python package requirements
-├── setup.py                   # Setup script for installing local packages
-└── template.py                # Script to create the initial project structure
+├── .github/
+│   └── workflows/
+│       └── aws.yaml              # GitHub Actions CI/CD pipeline
+├── notebooks/                    # Jupyter notebooks for EDA and experiments
+├── src/                           # Source code for the project
+│   ├── components/               # ML pipeline components
+│   ├── config/                   # Configuration files (schema)
+│   ├── constant/                 # Project constants
+│   ├── data_access/              # Scripts for accessing data
+│   ├── entity/                   # Project entities (configs, artifacts)
+│   ├── exception/                # Custom exception handling
+│   ├── logger/                   # Logging setup
+│   ├── pipeline/                 # ML pipeline definitions
+│   └── utils/                    # Utility functions
+├── static/                        # Static files for the web app (CSS, JS)
+├── templates/                     # HTML templates for the web app
+├── app.py                         # Main application file (Flask/FastAPI)
+├── demo.py                        # Script to run the training pipeline
+├── Dockerfile                     # Docker configuration
+├── requirements.txt               # Python package requirements
+├── setup.py                       # Setup script for installing local packages
+└── template.py                    # Script to create the initial project structure
+```
